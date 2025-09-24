@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Logs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="logs-box">
+    <h2>Login Logs</h2>
+    <a href="{{ url_for('index') }}">Back to Login</a>
+    <br><br>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Timestamp</th>
+          <th>IP Address</th>
+          <th>Result</th>
+          <th>DFA State</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for attempt in attempts %}
+        <tr class="{{ attempt.result | lower }}">
+          <td>{{ attempt.id }}</td>
+          <td>{{ attempt.created_at.strftime('%Y-%m-%d %H:%M:%S UTC') }}</td>
+          <td>{{ attempt.ip }}</td>
+          <td>{{ attempt.result }}</td>
+          <td>{{ attempt.state }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

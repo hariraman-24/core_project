@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Active Blocks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="logs-box">
+        <h2>Active IP Blocks</h2>
+        <a href="{{ url_for('index') }}">Back to Login</a>
+        <br><br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>IP Address</th>
+                    <th>Blocked Until</th>
+                    <th>Reason</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for block in blocks %}
+                <tr>
+                    <td>{{ block.id }}</td>
+                    <td>{{ block.ip }}</td>
+                    <td>{{ block.blocked_until.strftime('%Y-%m-%d %H:%M:%S UTC') }}</td>
+                    <td>{{ block.reason }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_unblock', block_id=block.id) }}" method="POST" style="display:inline;">
+                            <button type="submit">Unblock</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No active blocks.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
